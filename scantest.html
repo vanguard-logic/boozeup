@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Scanner Link Test</title>
+<style>
+  :root{--bg:#0A0D1A;--card:#121733;--line:#2A3260;--text:#EEF2FF;--muted:#A5B4FC;--ok:#22C55E;--bad:#EF4444;--acc:#22D3EE}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,Segoe UI,Roboto,sans-serif;padding:16px}
+  h1{font-size:20px;margin:0 0 4px}
+  p{margin:6px 0;color:var(--muted)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:14px 0}
+  h2{font-size:17px;margin:0 0 6px}
+  button{width:100%;padding:14px;border:0;border-radius:12px;background:var(--acc);color:#0A0D1A;font-weight:700;font-size:16px;margin-top:8px}
+  iframe{width:100%;height:70vh;border:1px solid var(--line);border-radius:12px;background:#fff;margin-top:10px}
+  .res{font-size:22px;font-weight:800;margin-top:10px}
+  .ok{color:var(--ok)}.bad{color:var(--bad)}
+</style>
+</head>
+<body>
+<h1>Scanner Link Test</h1>
+<p>This page only tests the connection. It does not change BoozeUp or the scanner.</p>
+
+<div class="card">
+  <h2>Test A: Scanner inside BoozeUp</h2>
+  <p>Tap the button. Does the scanner show inside the box?</p>
+  <button id="a">Show scanner inside</button>
+  <div id="abox"></div>
+</div>
+
+<div class="card">
+  <h2>Test B: Scanner in a new tab</h2>
+  <p>Tap the button. The scanner opens in a new tab. Wait 5 seconds, then come back to this tab.</p>
+  <button id="b">Open scanner in new tab</button>
+  <div id="bres" class="res"></div>
+</div>
+
+<script>
+var URL_='https://vld-label-scanner.ai.studio/';
+document.getElementById('a').onclick=function(){
+  document.getElementById('abox').innerHTML='<iframe src="'+URL_+'?in=boozeup" allow="camera; clipboard-write" title="Scanner"></iframe>';
+};
+document.getElementById('b').onclick=function(){
+  var r=document.getElementById('bres');r.className='res';r.textContent='Checking…';
+  var w=window.open(URL_+'?in=boozeup','_blank');
+  if(!w){r.className='res bad';r.textContent='Result B: BLOCKED';return}
+  setTimeout(function(){
+    var linked=false;try{linked=!w.closed}catch(e){linked=false}
+    r.className='res '+(linked?'ok':'bad');
+    r.textContent='Result B: '+(linked?'LINKED':'NOT LINKED');
+  },5000);
+};
+</script>
+</body>
+</html>
